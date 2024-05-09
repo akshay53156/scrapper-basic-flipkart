@@ -8,7 +8,7 @@ import { appendFile } from "fs";
     userDataDir: "./tmp",
   });
   const page = await browser.newPage();
-  await page.goto("https://www.flipkart.com/search?q=phone", {
+  await page.goto("https://www.flipkart.com/search?q=laptop", {
     waitUntil: "load",
   });
 
@@ -16,15 +16,16 @@ import { appendFile } from "fs";
 
   async function fetchData() {
     const fetchElements = await page.evaluate(productsDataEval);
+    console.log(fetchElements)
     productData.push(...fetchElements);
   }
 
   let isNextBtnPresent = true;
   let currentPage = 1;
 
-  while (currentPage < 43) {
+  while (currentPage < 20) {
     await fetchData();
-    const nextBtn = (await page.$$("._1LKTO3")).pop();
+    const nextBtn = (await page.$$("._9QVEpD")).pop();
     isNextBtnPresent =
       (await nextBtn?.evaluate((node) => node.textContent)) === "Next";
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -53,12 +54,12 @@ import { appendFile } from "fs";
 
 function productsDataEval() {
   function sanitizeHTMLToData(node: HTMLElement): any {
-    const title = node.querySelector("._4rR01T")?.textContent;
-    const rating = node.querySelector("._3LWZlK")?.textContent;
-    const price = node.querySelector("._30jeq3")?.textContent;
-    const product_img = node.querySelector("._396cs4")?.getAttribute("src");
+    const title = node.querySelector(".KzDlHZ")?.textContent;
+    const rating = node.querySelector(".XQDdHH")?.textContent;
+    const price = node.querySelector("._4b5DiR")?.textContent;
+    const product_img = node.querySelector(".DByuf4")?.getAttribute("src");
     const specifications = Array.from(
-      node.querySelectorAll(".rgWa7D"),
+      node.querySelectorAll(".G4BRas"),
       (node) => {
         return node.textContent;
       }
@@ -71,7 +72,7 @@ function productsDataEval() {
   }
 
   const fetchElements = Array.from(
-    document.getElementsByClassName("_1fQZEK"),
+    document.getElementsByClassName("tUxRFH"),
     (node) => {
       return getProductDetails(node as HTMLElement);
     }
